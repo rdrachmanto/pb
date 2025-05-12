@@ -1,8 +1,8 @@
 from datetime import datetime
 
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse
+from fastapi import FastAPI, Form, Request, Response
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
@@ -58,6 +58,21 @@ async def index(request: Request):
     """)
     pastes = [Pastes(**row) for row in rows]
     return templates.TemplateResponse(request=request, name="app.html", context={ "pastes":pastes })
+
+
+@app.get("/new", response_class=HTMLResponse)
+async def new_paste_form(request: Request):
+    return templates.TemplateResponse(request=request, name="paste.html")
+
+
+@app.post("/new")
+async def create_paste(title: str = Form(...), content: str = Form(...)):
+    await database.execute("""
+        INSERT INTO pastes (title, content) VALUES (:title, :content)
+    """, { "title": title, "content": content })
+    response = Response(status_code=200)
+    response.headers["HX-Redirect"] = "/"
+    return response
 
 
 @app.get("/search", response_class=HTMLResponse)

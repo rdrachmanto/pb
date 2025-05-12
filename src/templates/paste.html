@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Paste | RD Pastebin</title>
+  <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+</head>
+<body>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/new">New Paste</a>
+  </nav>
+
+  <main>
+    <section>
+      <form
+        hx-post="/new"
+        hx-swap="none">
+        <input type="text" name="title" id="" placeholder="Title..." required>
+        <br>
+        <textarea name="content" id="" cols="30" rows="10" placeholder="Paste something..." required></textarea>
+        <br>
+        <button type="submit">Post</button>
+      </form>
+    </section>
+  </main>
+</body>
+</html>
