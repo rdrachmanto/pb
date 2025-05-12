@@ -1,0 +1,8 @@
+{% for paste in pastes %}
+  <tr>
+    <td>{{ paste.id }}</td>
+    <td>{{ paste.title }}</td>
+    <td>{{ paste.content }}</td>
+    <td><button>Delete</button></td>
+  </tr> 
+{% endfor %}

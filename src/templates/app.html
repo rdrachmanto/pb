@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Main Page | RD Pastebin</title>
+  <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+</head>
+<body>
+  <nav>
+    <a href="#">Home</a>
+  </nav>
+
+  <main>
+    <section>
+      <h2>RD Pastebin</h2>
+      <p>Self-hosted!</p>
+    </section>
+    <section>
+      <table>
+        <thead>
+          <tr>
+            <td>Id</td>
+            <td>Created At</td>
+            <td>Description</td>
+            <td>Actions</td>
+          </tr>
+        </thead>
+        <tbody>
+          {% include "_tblrow.html" %}
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+</body>
+</html>
+
