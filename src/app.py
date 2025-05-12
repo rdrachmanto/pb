@@ -71,3 +71,9 @@ async def query(request: Request, q: str):
 
     pastes = [Pastes(**row) for row in rows]
     return templates.TemplateResponse(request=request, name="_tblrow.html", context={ "pastes": pastes })
+
+
+@app.delete("/{paste_id}", response_class=HTMLResponse)
+async def remove_paste(paste_id: int):
+    await database.execute("DELETE FROM pastes WHERE id = :id", { "id": paste_id })
+    return HTMLResponse("")

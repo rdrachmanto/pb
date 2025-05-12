@@ -1,9 +1,16 @@
 {% for paste in pastes %}
-  <tr>
-    <td>{{ paste.id }}</td>
+  <tr id="paste-{{paste.id}}">
     <td>{{ paste.title }}</td>
     <td>{{ paste.content }}</td>
     <td>{{ paste.created_at }}</td>
-    <td><button>Delete</button></td>
+    <td>
+      <button
+        hx-delete="/{{ paste.id }}"
+        hx-target="#paste-{{paste.id}}"
+        hx-swap="outerHTML"
+        hx-confirm="Are you sure? This action is irreversible">
+        Delete
+      </button>
+    </td>
   </tr> 
 {% endfor %}
