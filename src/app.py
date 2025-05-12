@@ -1,8 +1,9 @@
 from datetime import datetime
+from urllib.parse import quote_plus
 
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Form, Request, Response
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
@@ -62,20 +63,25 @@ async def index(request: Request):
 
 @app.get("/new", response_class=HTMLResponse)
 async def new_paste_form(request: Request):
-    return templates.TemplateResponse(request=request, name="paste.html")
+    return templates.TemplateResponse(request=request, name="paste.html", context={ "paste": None })
 
 
 @app.post("/new")
 async def create_paste(title: str = Form(...), content: str = Form(...)):
-    await database.execute("""
-        INSERT INTO pastes (title, content) VALUES (:title, :content)
+    id = await database.execute("""
+        INSERT INTO pastes (title, content) 
+        VALUES (:title, :content)
+        RETURNING id;
     """, { "title": title, "content": content })
+
     response = Response(status_code=200)
-    response.headers["HX-Redirect"] = "/"
+    flash_message = quote_plus("Paste uploaded")
+    response.headers["HX-Redirect"] = f"/{id}?flash={flash_message}"
     return response
 
+
 @app.get("/{paste_id}", response_class=HTMLResponse)
-async def view(request: Request, paste_id: int):
+async def view(request: Request, paste_id: int, flash: str | None = None):
     row = await database.fetch_one("""
         SELECT id, title, content, created_at
         FROM pastes 
@@ -83,7 +89,26 @@ async def view(request: Request, paste_id: int):
         ORDER BY created_at DESC
     """, { "id": paste_id })
     paste = Pastes(**row)
-    return templates.TemplateResponse(request=request, name="paste.html", context={ "paste": paste })
+
+    return templates.TemplateResponse(
+        request=request, 
+        name="paste.html", 
+        context={ "paste": paste, "flash": flash }
+    )
+
+
+@app.put("/{paste_id}")
+async def put(request: Request, paste_id: int, title: str = Form(...), content: str = Form(...)):
+    await database.execute("""
+        UPDATE pastes
+        SET title = :title, content = :content
+        WHERE id = :id
+    """, { "id": paste_id, "title": title, "content": content })
+
+    response = Response(status_code=200)
+    flash_message = quote_plus("Paste updated")
+    response.headers["HX-Redirect"] = f"/{paste_id}?flash={flash_message}"
+    return response
 
 
 @app.get("/search", response_class=HTMLResponse)

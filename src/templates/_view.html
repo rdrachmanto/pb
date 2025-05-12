@@ -1,0 +1,34 @@
+<section id="ctxview">
+  {% include "_flash.html" %}
+  <form
+      hx-swap="none"
+      {% if paste and paste.id is not none %}
+        hx-put="/{{ paste.id }}"
+      {% else %}
+        hx-post="/new"
+      {% endif %}>
+    <input
+        type="text" 
+        name="title" 
+        placeholder="Title..." 
+        required
+        value="{{ paste.title | default('') }}">
+    <br>
+    <textarea 
+        name="content" 
+        cols="30" 
+        rows="10" 
+        placeholder="Paste something..." 
+        required>
+      {{- paste.content | default("") -}}
+    </textarea>
+    <br>
+    <button type="submit">
+      {% if paste and paste.id is not none %}
+      Update
+      {% else %}
+      Post
+      {% endif %}
+    </button>
+  </form>
+</section>

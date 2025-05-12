@@ -7,41 +7,10 @@
   <script src="https://unpkg.com/htmx.org@2.0.4"></script>
 </head>
 <body>
-  <nav>
-    <a href="/">Home</a>
-    <a href="/new">New Paste</a>
-  </nav>
+  {% include "_nav.html" %}
 
   <main>
-    <section>
-      <form
-        hx-post="/new"
-        hx-swap="none">
-        <input
-          type="text" 
-          name="title" 
-          placeholder="Title..." 
-          required
-          value="{{ paste.title | default('') }}">
-        <br>
-        <textarea 
-          name="content" 
-          cols="30" 
-          rows="10" 
-          placeholder="Paste something..." 
-          required>
-            {{- paste.content | default("") -}}
-        </textarea>
-        <br>
-        <button type="submit">
-          {% if (paste.id is not none) %}
-            Update
-          {% else %}
-            Post
-          {% endif %}
-        </button>
-      </form>
-    </section>
+    {% include "_view.html" %}
   </main>
 </body>
 </html>
