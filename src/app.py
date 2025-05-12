@@ -54,7 +54,20 @@ async def index(request: Request):
     rows = await database.fetch_all("""
         SELECT id, title, LEFT(content, 75) AS content, created_at
         FROM pastes 
-        ORDER BY created_at DESC
+        ORDER BY created_at DESC;
     """)
     pastes = [Pastes(**row) for row in rows]
     return templates.TemplateResponse(request=request, name="app.html", context={ "pastes":pastes })
+
+
+@app.get("/search", response_class=HTMLResponse)
+async def query(request: Request, q: str):
+    rows = await database.fetch_all("""
+        SELECT id, title, LEFT(content, 75) AS content, created_at
+        FROM pastes
+        WHERE title ILIKE :q OR content ILIKE :q
+        ORDER BY created_at DESC
+    """, { "q": f"%{q}%" })
+
+    pastes = [Pastes(**row) for row in rows]
+    return templates.TemplateResponse(request=request, name="_tblrow.html", context={ "pastes": pastes })

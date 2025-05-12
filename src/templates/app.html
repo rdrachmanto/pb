@@ -15,18 +15,27 @@
     <section>
       <h2>RD Pastebin</h2>
       <p>Self-hosted!</p>
+      <input
+        type="text"
+        name="q"
+        placeholder="Search..."
+        hx-get="/search"
+        hx-trigger="keyup changed delay:100ms"
+        hx-target="#available-pastes"
+        autocomplete="off">
     </section>
     <section>
       <table>
         <thead>
           <tr>
             <td>Id</td>
-            <td>Created At</td>
+            <td>Title</td>
             <td>Description</td>
+            <td>Datetime</td>
             <td>Actions</td>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="available-pastes">
           {% include "_tblrow.html" %}
         </tbody>
       </table>
