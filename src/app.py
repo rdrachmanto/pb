@@ -74,6 +74,17 @@ async def create_paste(title: str = Form(...), content: str = Form(...)):
     response.headers["HX-Redirect"] = "/"
     return response
 
+@app.get("/{paste_id}", response_class=HTMLResponse)
+async def view(request: Request, paste_id: int):
+    row = await database.fetch_one("""
+        SELECT id, title, content, created_at
+        FROM pastes 
+        WHERE id = :id
+        ORDER BY created_at DESC
+    """, { "id": paste_id })
+    paste = Pastes(**row)
+    return templates.TemplateResponse(request=request, name="paste.html", context={ "paste": paste })
+
 
 @app.get("/search", response_class=HTMLResponse)
 async def query(request: Request, q: str):

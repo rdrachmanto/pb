@@ -4,6 +4,7 @@
     <td>{{ paste.content }}</td>
     <td>{{ paste.created_at }}</td>
     <td>
+      <a href="/{{ paste.id }}">View</a>
       <button
         hx-delete="/{{ paste.id }}"
         hx-target="#paste-{{paste.id}}"

@@ -17,11 +17,29 @@
       <form
         hx-post="/new"
         hx-swap="none">
-        <input type="text" name="title" id="" placeholder="Title..." required>
+        <input
+          type="text" 
+          name="title" 
+          placeholder="Title..." 
+          required
+          value="{{ paste.title | default('') }}">
         <br>
-        <textarea name="content" id="" cols="30" rows="10" placeholder="Paste something..." required></textarea>
+        <textarea 
+          name="content" 
+          cols="30" 
+          rows="10" 
+          placeholder="Paste something..." 
+          required>
+            {{- paste.content | default("") -}}
+        </textarea>
         <br>
-        <button type="submit">Post</button>
+        <button type="submit">
+          {% if (paste.id is not none) %}
+            Update
+          {% else %}
+            Post
+          {% endif %}
+        </button>
       </form>
     </section>
   </main>
