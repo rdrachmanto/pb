@@ -2,6 +2,12 @@
 
 My own implementation of pastebin, note-dropper or shared clipboard. Intended to be hosted at a home-server
 
+## Features
+
+1. Adding pastes
+2. Deleting pastes
+3. Editing pastes
+
 ## Running
 
 1. Install dependencies
@@ -18,8 +24,6 @@ My own implementation of pastebin, note-dropper or shared clipboard. Intended to
 
 ## Roadmap
 
-1. Implement a view page
-2. Allow editing
 3. Tagging
 4. Paging
 5. Filter based on datetime or tags
@@ -27,4 +31,4 @@ My own implementation of pastebin, note-dropper or shared clipboard. Intended to
 
 ## License
 
-This is licensed under the MIT License
+MIT License
