@@ -1,10 +1,12 @@
 {% for paste in pastes %}
   <tr id="paste-{{paste.id}}">
-    <td>{{ paste.title }}</td>
-    <td>{{ paste.content }}</td>
-    <td>{{ paste.created_at }}</td>
-    <td>
-      <a href="/{{ paste.id }}">View</a>
+    <td style="width: 40%">
+      <a class="rg-link" href="/{{ paste.id }}">
+        {{ paste.title }}
+      </a>
+    </td>
+    <td style="width: 40%">{{ paste.created_at }}</td>
+    <td style="width: 20%">
       <button
         hx-delete="/{{ paste.id }}"
         hx-target="#paste-{{paste.id}}"

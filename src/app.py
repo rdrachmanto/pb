@@ -2,7 +2,7 @@ from datetime import datetime
 from urllib.parse import quote_plus
 
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, Form, Request, Response
+from fastapi import FastAPI, Form, Query, Request, Response
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -46,14 +46,14 @@ templates = Jinja2Templates(directory="src/templates")
 class Pastes(BaseModel):
     id: int
     title: str
-    content: str
+    content: str | None = None
     created_at: datetime
 
 
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
     rows = await database.fetch_all("""
-        SELECT id, title, LEFT(content, 75) AS content, created_at
+        SELECT id, title, created_at
         FROM pastes 
         ORDER BY created_at DESC;
     """)
@@ -78,6 +78,19 @@ async def create_paste(title: str = Form(...), content: str = Form(...)):
     flash_message = quote_plus("Paste uploaded")
     response.headers["HX-Redirect"] = f"/{id}?flash={flash_message}"
     return response
+
+
+@app.get("/search", response_class=HTMLResponse)
+async def query(request: Request, q: str = Query(...)):
+    rows = await database.fetch_all("""
+        SELECT id, title, created_at
+        FROM pastes
+        WHERE title ILIKE :q
+        ORDER BY created_at DESC
+    """, { "q": f"%{q}%" })
+
+    pastes = [Pastes(**row) for row in rows]
+    return templates.TemplateResponse(request=request, name="_tblrow.html", context={ "pastes": pastes })
 
 
 @app.get("/{paste_id}", response_class=HTMLResponse)
@@ -109,19 +122,6 @@ async def put(request: Request, paste_id: int, title: str = Form(...), content: 
     flash_message = quote_plus("Paste updated")
     response.headers["HX-Redirect"] = f"/{paste_id}?flash={flash_message}"
     return response
-
-
-@app.get("/search", response_class=HTMLResponse)
-async def query(request: Request, q: str):
-    rows = await database.fetch_all("""
-        SELECT id, title, LEFT(content, 75) AS content, created_at
-        FROM pastes
-        WHERE title ILIKE :q OR content ILIKE :q
-        ORDER BY created_at DESC
-    """, { "q": f"%{q}%" })
-
-    pastes = [Pastes(**row) for row in rows]
-    return templates.TemplateResponse(request=request, name="_tblrow.html", context={ "pastes": pastes })
 
 
 @app.delete("/{paste_id}", response_class=HTMLResponse)

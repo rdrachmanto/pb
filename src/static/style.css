@@ -1,0 +1,133 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Plus Jakarta Sans";
+  font-size: 15px;
+}
+
+body {
+  background-color: #8caec155;
+}
+
+main {
+  width: 92%;
+  margin: 0 auto;
+  padding: 3rem 0;
+}
+
+section {
+  border: 1px solid #a0a0a088;
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 0.6rem;
+  border-bottom: 1px solid #a0a0a088;
+}
+
+header > p {
+  font-weight: bold;
+}
+
+header > input#search {
+  width: 45%;
+  padding: 0.6rem;
+  background-color: #a0a0a088;
+  outline: none;
+  border: none;
+}
+
+a,
+button {
+  padding: 0.6rem 0.6rem;
+  background-color: #1e211f;
+  color: white;
+  border: none;
+  display: inline-block;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.cl-neutral {
+  background-color: #a0a0a088;
+  color: #1e211f;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 0.6rem 0.6rem;
+  border: 1px solid #a0a0a088;
+}
+
+th {
+  text-align: left;
+  border-top: none;
+}
+
+tbody > tr:hover {
+  background-color: #a0a0a033;
+}
+
+thead > tr > th:first-child,
+tbody > tr > td:first-child {
+  border-left: none;
+}
+
+thead > tr > th:last-child,
+tbody > tr > td:last-child {
+  border-right: none;
+}
+
+a.rg-link {
+  display: block;
+  color: blue;
+  background-color: transparent;
+  font-weight: normal;
+  text-transform: none;
+  padding: 0px;
+  width: 100%;
+  height: auto;
+}
+
+section > div.form-container {
+  padding: 0.6rem;
+  width: 100%;
+}
+
+div > form {
+  width: 100%;
+}
+
+input.form-input,
+textarea.form-input {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 0.6rem;
+}
+
+textarea.form-input {
+  resize: vertical;
+  min-height: 70vh;
+  font-family: "Share Tech"
+}
+
+#flash {
+  color: #879a39ee;
+  margin-bottom: 0.6rem;
+  border: none
+}
+
+#flash p:before {
+  content: "✓ "
+}

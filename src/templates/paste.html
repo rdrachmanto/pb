@@ -5,10 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>New Paste | RD Pastebin</title>
   <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Share+Tech&display=swap');
+  </style>
+  <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
   <main>
-    {% include "_view.html" %}
+    <section>
+      {% include "_nav.html" %}
+      {% include "_view.html" %}
+    </section>
   </main>
 </body>
 </html>

@@ -1,0 +1,16 @@
+<header>
+  <a href="/" class="cl-neutral">Clippy</a>
+  <input
+    id="search"
+    type="text"
+    name="q"
+    placeholder="Search..."
+    hx-get="/search"
+    hx-trigger="keyup changed delay:100ms"
+    hx-target="#available-pastes"
+    hx-swap="innerHTML"
+    hx-params="*"
+    autocomplete="off">
+  <a href="/new">New</a>
+</header>
+

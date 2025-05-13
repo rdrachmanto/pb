@@ -1,4 +1,4 @@
-<section id="ctxview">
+<div id="ctxview" class="form-container">
   {% include "_flash.html" %}
   <form
       hx-swap="none"
@@ -12,14 +12,16 @@
         name="title" 
         placeholder="Title..." 
         required
-        value="{{ paste.title | default('') }}">
+        value="{{ paste.title | default('') }}"
+        class="form-input">
     <br>
     <textarea 
         name="content" 
         cols="30" 
         rows="10" 
         placeholder="Paste something..." 
-        required>
+        required
+        class="form-input">
       {{- paste.content | default("") -}}
     </textarea>
     <br>
@@ -31,4 +33,4 @@
       {% endif %}
     </button>
   </form>
-</section>
+</div>

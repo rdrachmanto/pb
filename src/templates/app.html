@@ -5,29 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Main Page | RD Pastebin</title>
   <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Share+Tech&display=swap');
+  </style>
+  <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
   <main>
     <section>
-      <h2>RD Pastebin</h2>
-      <p>Self-hosted!</p>
-      <input
-        type="text"
-        name="q"
-        placeholder="Search..."
-        hx-get="/search"
-        hx-trigger="keyup changed delay:100ms"
-        hx-target="#available-pastes"
-        autocomplete="off">
-    </section>
-    <section>
+      {% include "_nav.html" %}
       <table>
         <thead>
           <tr>
-            <td>Title</td>
-            <td>Description</td>
-            <td>Datetime</td>
-            <td>Actions</td>
+            <th>Title</th>
+            <th>Last Accessed</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody id="available-pastes">
