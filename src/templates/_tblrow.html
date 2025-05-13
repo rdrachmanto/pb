@@ -6,8 +6,8 @@
           {{ paste.title }}
         </a>
       </td>
-      <td style="width: 20%">{{ paste.updated_at }}</td>
-      <td style="width: 20%">{{ paste.last_accessed }}</td>
+      <td style="width: 20%">{{ paste.human_updated_at }}</td>
+      <td style="width: 20%">{{ paste.human_last_accessed }}</td>
       <td style="width: 10%">
         <button
           hx-delete="/{{ paste.id }}"
@@ -21,6 +21,6 @@
   {% endfor %}
 {% else %}
   <tr>
-    <td colspan=3 style="color: #a0a0a0; text-align:center;">No pastes available, get pasting!</td>
+    <td colspan=4 style="color: #a0a0a0; text-align:center;">No pastes available, get pasting!</td>
   </tr>
 {% endif %}

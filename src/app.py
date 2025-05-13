@@ -1,4 +1,5 @@
-from datetime import datetime
+from datetime import datetime, timezone
+from dateutil import parser
 from urllib.parse import quote_plus
 
 from contextlib import asynccontextmanager
@@ -9,6 +10,8 @@ from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 from pydantic_settings import BaseSettings, SettingsConfigDict
 import databases
+
+import humanize
 
 
 class Settings(BaseSettings):
@@ -52,6 +55,8 @@ class Pastes(BaseModel):
     created_at: datetime | None = None
     updated_at: datetime | None = None
     last_accessed: datetime | None = None
+    human_updated_at: str | None = None
+    human_last_accessed: str | None = None
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -61,7 +66,13 @@ async def index(request: Request):
         FROM pastes 
         ORDER BY last_accessed DESC;
     """)
-    pastes = [Pastes(**row) for row in rows]
+    pastes = [Pastes(
+        id=row.id,
+        title=row.title,
+        human_updated_at=humanize.naturaltime(datetime.now(timezone.utc) - row.updated_at),
+        human_last_accessed=humanize.naturaltime(datetime.now(timezone.utc) - row.last_accessed),
+    ) 
+    for row in rows]
     return templates.TemplateResponse(request=request, name="app.html", context={ "pastes":pastes })
 
 
