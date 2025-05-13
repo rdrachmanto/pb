@@ -28,7 +28,9 @@ async def lifespan(app: FastAPI):
             id SERIAL PRIMARY KEY,
             title TEXT NOT NULL,
             content TEXT NOT NULL,
-            created_at TIMESTAMPTZ DEFAULT NOW()
+            created_at TIMESTAMPTZ DEFAULT NOW(),
+            updated_at TIMESTAMPTZ DEFAULT NOW(),
+            last_accessed TIMESTAMPTZ DEFAULT NOW()
         );
     """)
 
@@ -47,15 +49,17 @@ class Pastes(BaseModel):
     id: int
     title: str
     content: str | None = None
-    created_at: datetime
+    created_at: datetime | None = None
+    updated_at: datetime | None = None
+    last_accessed: datetime | None = None
 
 
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
     rows = await database.fetch_all("""
-        SELECT id, title, created_at
+        SELECT id, title, updated_at, last_accessed
         FROM pastes 
-        ORDER BY created_at DESC;
+        ORDER BY last_accessed DESC;
     """)
     pastes = [Pastes(**row) for row in rows]
     return templates.TemplateResponse(request=request, name="app.html", context={ "pastes":pastes })
@@ -83,10 +87,10 @@ async def create_paste(title: str = Form(...), content: str = Form(...)):
 @app.get("/search", response_class=HTMLResponse)
 async def query(request: Request, q: str = Query(...)):
     rows = await database.fetch_all("""
-        SELECT id, title, created_at
+        SELECT id, title, last_accessed, updated_at
         FROM pastes
         WHERE title ILIKE :q
-        ORDER BY created_at DESC
+        ORDER BY last_accessed DESC
     """, { "q": f"%{q}%" })
 
     pastes = [Pastes(**row) for row in rows]
@@ -95,11 +99,17 @@ async def query(request: Request, q: str = Query(...)):
 
 @app.get("/{paste_id}", response_class=HTMLResponse)
 async def view(request: Request, paste_id: int, flash: str | None = None):
+    await database.execute("""
+       UPDATE pastes
+       SET last_accessed = NOW()
+       WHERE id = :id;
+    """, { "id": paste_id })
+
     row = await database.fetch_one("""
-        SELECT id, title, content, created_at
+        SELECT id, title, content
         FROM pastes 
         WHERE id = :id
-        ORDER BY created_at DESC
+        ORDER BY last_accessed DESC
     """, { "id": paste_id })
     paste = Pastes(**row)
 
@@ -114,7 +124,7 @@ async def view(request: Request, paste_id: int, flash: str | None = None):
 async def put(request: Request, paste_id: int, title: str = Form(...), content: str = Form(...)):
     await database.execute("""
         UPDATE pastes
-        SET title = :title, content = :content
+        SET title = :title, content = :content, updated_at = NOW()
         WHERE id = :id
     """, { "id": paste_id, "title": title, "content": content })
 
