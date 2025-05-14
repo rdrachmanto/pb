@@ -1,15 +1,15 @@
 <header>
-  <a href="/" class="cl-neutral">Clippy</a>
+  <a href="{{ request.scope.root_path }}/" class="cl-neutral">Clippy</a>
   <input
     id="search"
     type="text"
     name="q"
     placeholder="Search..."
-    hx-get="/search"
+    hx-get="{{ request.scope.root_path }}/search"
     hx-trigger="keyup changed delay:100ms"
     hx-target="#available-pastes"
     hx-swap="innerHTML"
     autocomplete="off">
-  <a href="/new">New</a>
+  <a href="{{ request.scope.root_path }}/new">New</a>
 </header>
 

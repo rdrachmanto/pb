@@ -16,6 +16,7 @@ import humanize
 
 class Settings(BaseSettings):
     database_url: str 
+    root_path: str 
     model_config = SettingsConfigDict(env_file=".env")
 
 settings = Settings()
@@ -43,7 +44,7 @@ async def lifespan(app: FastAPI):
     await database.disconnect()
 
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(lifespan=lifespan, root_path=settings.root_path)
 app.mount("/static", StaticFiles(directory="src/static"), name="static")
 templates = Jinja2Templates(directory="src/templates")
 
@@ -71,8 +72,7 @@ async def index(request: Request):
         title=row.title,
         human_updated_at=humanize.naturaltime(datetime.now(timezone.utc) - row.updated_at),
         human_last_accessed=humanize.naturaltime(datetime.now(timezone.utc) - row.last_accessed),
-    ) 
-    for row in rows]
+    ) for row in rows]
     return templates.TemplateResponse(request=request, name="app.html", context={ "pastes":pastes })
 
 

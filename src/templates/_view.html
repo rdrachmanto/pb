@@ -3,9 +3,9 @@
   <form
       hx-swap="none"
       {% if paste and paste.id is not none %}
-        hx-put="/{{ paste.id }}"
+        hx-put="{{ request.scope.root_path }}/{{ paste.id }}"
       {% else %}
-        hx-post="/new"
+        hx-post="{{ request.scope.root_path }}/new"
       {% endif %}>
     <input
         type="text" 
