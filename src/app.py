@@ -46,7 +46,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan, root_path=settings.root_path)
 print(f"Mounting static files at {settings.root_path}/static")
-app.mount(f"{settings.root_path}/static", StaticFiles(directory="src/static"), name="static")
+app.mount(f"/static", StaticFiles(directory="src/static"), name="static")
 templates = Jinja2Templates(directory="src/templates")
 
 
@@ -92,7 +92,7 @@ async def create_paste(title: str = Form(...), content: str = Form(...)):
 
     response = Response(status_code=200)
     flash_message = quote_plus("Paste uploaded")
-    response.headers["HX-Redirect"] = f"/{id}?flash={flash_message}"
+    response.headers["HX-Redirect"] = f"{settings.root_path}/{id}?flash={flash_message}"
     return response
 
 
@@ -142,7 +142,7 @@ async def put(request: Request, paste_id: int, title: str = Form(...), content: 
 
     response = Response(status_code=200)
     flash_message = quote_plus("Paste updated")
-    response.headers["HX-Redirect"] = f"/{paste_id}?flash={flash_message}"
+    response.headers["HX-Redirect"] = f"{settings.root_path}/{paste_id}?flash={flash_message}"
     return response
 
 
