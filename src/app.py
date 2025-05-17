@@ -17,7 +17,7 @@ import humanize
 class Settings(BaseSettings):
     database_url: str 
     root_path: str 
-    model_config = SettingsConfigDict(env_file=".env")
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
 settings = Settings()
 database = databases.Database(settings.database_url)
